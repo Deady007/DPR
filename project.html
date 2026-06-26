@@ -14,36 +14,57 @@
     <button class="icon-btn" onclick="history.back()" aria-label="Back">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     </button>
-    <h1 id="projTitle">Loading…</h1>
+    <h1 id="projTitle">DPR</h1>
+    <button class="icon-btn" onclick="openProjectDrawer()" aria-label="Menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" width="26" height="26">
+        <line x1="3" y1="6"  x2="21" y2="6"/>
+        <line x1="3" y1="12" x2="21" y2="12"/>
+        <line x1="3" y1="18" x2="21" y2="18"/>
+      </svg>
+    </button>
   </header>
 
-  <!-- TAB BAR -->
-  <nav class="tabbar" id="tabbar">
-    <button class="tab" data-tab="dpr"      onclick="switchTab('dpr')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-      <span>DPR</span>
-    </button>
-    <button class="tab" data-tab="document" onclick="switchTab('document')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 16l-4-4-4 4"/><path d="M12 12v9"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-      <span>Document</span>
-    </button>
-    <button class="tab" data-tab="sop"      onclick="switchTab('sop')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-      <span>SOP</span>
-    </button>
-    <button class="tab" data-tab="query"    onclick="switchTab('query')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Query</span>
-    </button>
-    <button class="tab" data-tab="po"       onclick="switchTab('po')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-      <span>P.O</span>
-    </button>
-    <button class="tab" data-tab="pendingWorks" onclick="switchTab('pendingWorks')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-      <span>Pending</span>
-    </button>
-  </nav>
+  <!-- PROJECT SIDEBAR DRAWER -->
+  <div class="overlay" id="projectDrawer" onclick="if(event.target===this)closeProjectDrawer()">
+    <nav class="drawer project-drawer" role="navigation">
+
+      <div class="pd-head">
+        <div class="pd-project-name" id="pdProjectName">—</div>
+        <div class="pd-sub">Select a section</div>
+      </div>
+
+      <div class="pd-item" data-tab="dpr" onclick="switchTab('dpr')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="24" height="24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+        DPR
+      </div>
+
+      <div class="pd-item" data-tab="document" onclick="switchTab('document')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M16 16l-4-4-4 4"/><path d="M12 12v9"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+        Document
+      </div>
+
+      <div class="pd-item" data-tab="sop" onclick="switchTab('sop')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        SOP
+      </div>
+
+      <div class="pd-item" data-tab="query" onclick="switchTab('query')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Query
+      </div>
+
+      <div class="pd-item" data-tab="po" onclick="switchTab('po')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        Materials
+      </div>
+
+      <div class="pd-item" data-tab="pendingWorks" onclick="switchTab('pendingWorks')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="24" height="24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Pending Work
+      </div>
+
+    </nav>
+  </div>
 
   <!-- MAIN CONTENT -->
   <main class="screen" id="tabContent"></main>
@@ -127,9 +148,6 @@
     </div>
   </div>
 
-  <!-- NEW MEETING MODAL (accessed from drawer) -->
-  <!-- Share dropdown placeholder (rendered inline per-view) -->
-
   <!-- GESTURE BAR -->
   <div class="navbar-gesture"></div>
 
@@ -154,41 +172,56 @@ const _pid    = qp('id', 'demo');
 const project = DB.getProject(_pid);
 const pdata   = DB.getProjectData(_pid);
 
-/* Active tab + per-tab view stack */
-const appState = {
-  tab: qp('tab', 'dpr'),
+/* Friendly label for each tab (used in appbar title) */
+const TAB_LABELS = {
+  dpr:          'DPR',
+  document:     'Document',
+  sop:          'SOP',
+  query:        'Query',
+  po:           'Materials',
+  pendingWorks: 'Pending Work',
 };
 
-/* --- Project title --- */
-document.getElementById('projTitle').textContent = project.name;
+/* Active tab */
+const appState = { tab: qp('tab', 'dpr') };
+
+/* --- Project drawer helpers --- */
+function openProjectDrawer()  { document.getElementById('projectDrawer')?.classList.add('open'); }
+function closeProjectDrawer() { document.getElementById('projectDrawer')?.classList.remove('open'); }
+
+/* Seed project name into drawer header */
+document.getElementById('pdProjectName').textContent = project.name;
 
 /* --- Tab switching --- */
 function switchTab(id) {
   appState.tab = id;
+  closeProjectDrawer();
   /* reset each tab's internal view state */
-  if (id === 'dpr')      dprState.view = 'list';
-  if (id === 'document') docState.view = 'list';
-  if (id === 'sop')      sopState.view = 'list';
-  if (id === 'query')    queryState.view = 'list';
+  if (id === 'dpr')          dprState.view = 'list';
+  if (id === 'document')     docState.view = 'list';
+  if (id === 'sop')          sopState.view = 'list';
+  if (id === 'query')        queryState.view = 'list';
   if (id === 'po')           poState.view = 'list';
   if (id === 'pendingWorks') { pendingState.view = 'list'; pendingState.filter = 'All'; }
   renderActiveTab();
 }
 
 function renderActiveTab() {
-  /* highlight tab buttons */
-  document.querySelectorAll('.tabbar .tab').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.tab === appState.tab);
+  /* update appbar title */
+  document.getElementById('projTitle').textContent = TAB_LABELS[appState.tab] || '';
+  /* highlight active drawer item */
+  document.querySelectorAll('#projectDrawer .pd-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.tab === appState.tab);
   });
   /* render content */
   const el = document.getElementById('tabContent');
   switch (appState.tab) {
-    case 'dpr':      el.innerHTML = renderDPR();      break;
-    case 'document': el.innerHTML = renderDocument(); break;
-    case 'sop':      el.innerHTML = renderSOP();      break;
-    case 'query':    el.innerHTML = renderQuery();    break;
+    case 'dpr':          el.innerHTML = renderDPR();      break;
+    case 'document':     el.innerHTML = renderDocument(); break;
+    case 'sop':          el.innerHTML = renderSOP();      break;
+    case 'query':        el.innerHTML = renderQuery();    break;
     case 'po':           el.innerHTML = renderPO();       break;
-    case 'pendingWorks': el.innerHTML = renderPending(); break;
+    case 'pendingWorks': el.innerHTML = renderPending();  break;
   }
   /* post-render hooks */
   if (appState.tab === 'po') poPostRender();
@@ -239,12 +272,8 @@ function openAddSop() {
   document.getElementById('sopAgencyVal').textContent = 'Select Agencies';
   document.getElementById('sopAgencyVal').classList.add('ph');
   openOverlay('addSopOverlay');
-
-  /* Populate structure list */
   document.getElementById('structureList').innerHTML =
     DB.structures.map(s => `<div class="picker-row" onclick="selectStructure('${s}')">${s}</div>`).join('');
-
-  /* Populate agency multi-select */
   renderAgencyPicker();
 }
 
@@ -282,12 +311,11 @@ function toggleAgency(name, row) {
   updateAgencyDoneBtn();
 }
 function updateAgencyDoneBtn() {
-  const n = _sopDraft.agencies.length;
-  document.getElementById('agencyDoneBtn').textContent = `Done (${n} selected)`;
+  document.getElementById('agencyDoneBtn').textContent = `Done (${_sopDraft.agencies.length} selected)`;
 }
 function agencyDone() {
   const val = _sopDraft.agencies.join(', ');
-  const el = document.getElementById('sopAgencyVal');
+  const el  = document.getElementById('sopAgencyVal');
   if (val) { el.textContent = val; el.classList.remove('ph'); }
   closeOverlay('agencyPicker');
 }
@@ -322,9 +350,7 @@ document.addEventListener('click', e => {
 });
 
 /* --- Helper: empty text --- */
-function emptyText(msg) {
-  return `<p class="empty-text">${msg}</p>`;
-}
+function emptyText(msg) { return `<p class="empty-text">${msg}</p>`; }
 
 /* --- Boot --- */
 renderActiveTab();
