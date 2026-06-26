@@ -152,7 +152,10 @@ window.DB = {
 
       /* Documents */
       folders: [
-        { id: "f1", name: "PHASE 2.0", date: "25/06/2026",
+        { id: "fd1", name: "Approved Quotes",                      date: "01/01/2026", locked: true,  files: [] },
+        { id: "fd2", name: "Site Pics",                            date: "01/01/2026", locked: true,  files: [] },
+        { id: "fd3", name: "Plumbing & Electrical Photographic Docs", date: "01/01/2026", locked: true, files: [] },
+        { id: "f1",  name: "PHASE 2.0", date: "25/06/2026",
           files: [{ id: "fl1", name: "1000043803.jpg", desc: "Phase 2 requirements", date: "25/06/2026", type: "image" }] },
       ],
 
@@ -200,6 +203,13 @@ window.DB = {
         { id: "Query/0005", date: "28/04/2026", client: "Siddhart Sarvaiya", rows: [] },
       ],
 
+      /* Pending Work Points */
+      pendingWorks: [
+        { id: "pw1", title: "Fix bathroom waterproofing – Wing B", priority: "High",   status: "Open",        dueDate: "30/06/2026", description: "Re-apply waterproofing membrane in bathroom area of Wing B before tile laying.", attachments: [] },
+        { id: "pw2", title: "Electrical conduit routing – 3rd floor",  priority: "Medium", status: "In Progress", dueDate: "05/07/2026", description: "Route conduit from DB to all switch-board points on the 3rd floor.", attachments: [] },
+        { id: "pw3", title: "Plaster patch – staircase lobby",         priority: "Low",    status: "Done",        dueDate: "20/06/2026", description: "Patch cracks in staircase lobby plaster before painting.", attachments: [] },
+      ],
+
       /* Purchase Orders */
       po: [
         { id: "PO-0001", orderDate: "06/12/2025", expiry: "19/12/2025", supplier: "Abc",
@@ -221,9 +231,32 @@ window.DB = {
     },
 
     test1: {
-      dpr: [], folders: [], sop: [], query: [], po: [],
+      dpr: [],
+      folders: [
+        { id: "fd1", name: "Approved Quotes",                         date: "01/01/2026", locked: true, files: [] },
+        { id: "fd2", name: "Site Pics",                               date: "01/01/2026", locked: true, files: [] },
+        { id: "fd3", name: "Plumbing & Electrical Photographic Docs", date: "01/01/2026", locked: true, files: [] },
+      ],
+      sop: [], query: [], po: [], pendingWorks: [],
     },
   },
+};
+
+/* ---------- Leave Management ---------- */
+DB.leave = {
+  types: ['Casual Leave', 'Sick Leave', 'Earned Leave', 'Comp Off'],
+  typeShort: { 'Casual Leave': 'CL', 'Sick Leave': 'SL', 'Earned Leave': 'EL', 'Comp Off': 'CO' },
+  employees: [
+    { id: 'e1', name: 'Viral Parmar',  role: 'Project Manager', balance: { CL: 12, SL: 8,  EL: 15, CO: 2 } },
+    { id: 'e2', name: 'Jenish Patel',  role: 'Site Engineer',   balance: { CL: 8,  SL: 6,  EL: 10, CO: 0 } },
+    { id: 'e3', name: 'Bipin Shah',    role: 'Civil Engineer',  balance: { CL: 10, SL: 8,  EL: 12, CO: 1 } },
+  ],
+  applications: [
+    { id: 'la1', empId: 'e2', empName: 'Jenish Patel',  type: 'Casual Leave', from: '28/06/2026', to: '29/06/2026', days: 2, reason: 'Family function',  status: 'pending',  appliedOn: '24/06/2026', approvedBy: '' },
+    { id: 'la2', empId: 'e3', empName: 'Bipin Shah',    type: 'Sick Leave',   from: '20/06/2026', to: '20/06/2026', days: 1, reason: 'Fever',            status: 'approved', appliedOn: '19/06/2026', approvedBy: 'Viral Parmar' },
+    { id: 'la3', empId: 'e1', empName: 'Viral Parmar',  type: 'Earned Leave', from: '15/07/2026', to: '18/07/2026', days: 4, reason: 'Annual vacation',  status: 'pending',  appliedOn: '22/06/2026', approvedBy: '' },
+    { id: 'la4', empId: 'e2', empName: 'Jenish Patel',  type: 'Comp Off',     from: '10/06/2026', to: '10/06/2026', days: 1, reason: 'Worked on Sunday', status: 'rejected', appliedOn: '08/06/2026', approvedBy: 'Viral Parmar' },
+  ],
 };
 
 /* helpers */

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Leave — Shreemay</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/leave-employee.js"></script>
+<script src="js/leave-admin.js"></script>
+<script>
+/* ── Leave shell ── */
+let leaveRole = 'employee';   /* employee | admin */
+
+function renderLeave() {
+  const emp = DB.leave.employees.find(e => e.name === DB.user.name) || DB.leave.employees[0];
+
+  const roleSwitch = `
+    <div class="role-switcher">
+      <button class="role-btn ${leaveRole === 'employee' ? 'active' : ''}"
+              onclick="leaveRole='employee';leaveEmpState.view='list';leaveAdminState.detailId=null;renderLeave()">
+        Employee
+      </button>
+      <button class="role-btn ${leaveRole === 'admin' ? 'active' : ''}"
+              onclick="leaveRole='admin';leaveAdminState.detailId=null;renderLeave()">
+        Admin
+      </button>
+    </div>`;
+
+  const body = leaveRole === 'admin'
+    ? renderLeaveAdmin()
+    : renderLeaveEmployee(emp);
+
+  const content = `
+    <main class="screen">
+      ${roleSwitch}
+      ${body}
+    </main>`;
+
+  mountShell(content, {
+    title: 'Leave Management',
+    back: true,
+  });
+}
+
+renderLeave();
+</script>
+</body>
+</html>

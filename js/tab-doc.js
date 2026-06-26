@@ -24,7 +24,9 @@ function docFolderList() {
             </div>
             <div class="row-item-date row-item-indent">${f.date}</div>
           </div>
-          <button class="icon-btn-danger" onclick="event.stopPropagation();deleteFolder('${f.id}')" aria-label="Delete folder" title="Delete folder">${icon('trash')}</button>
+          ${f.locked
+            ? `<span class="folder-lock" title="Default folder — cannot be deleted"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span>`
+            : `<button class="icon-btn-danger" onclick="event.stopPropagation();deleteFolder('${f.id}')" aria-label="Delete folder" title="Delete folder">${icon('trash')}</button>`}
         </div>`).join('')
     : emptyText('No folders yet. Tap "+ Create Folder" to start.');
 
