@@ -79,17 +79,17 @@ function poForm() {
       <input class="input" id="it_prod_${i}" value="${escHtmlPO(item.product)}" placeholder="Product" oninput="poState.draft.items[${i}].product=this.value">
       <div class="field-2" style="margin-top:12px">
         <div>
-          <div style="font-weight:700;margin-bottom:8px">Qty</div>
+          <label class="item-label" for="it_qty_${i}">Qty</label>
           <input class="input" type="number" id="it_qty_${i}" value="${item.qty}" min="1"
                  oninput="poState.draft.items[${i}].qty=+this.value;recalcPO()">
         </div>
         <div>
-          <div style="font-weight:700;margin-bottom:8px">UOM</div>
+          <label class="item-label" for="it_uom_${i}">UOM</label>
           <input class="input" id="it_uom_${i}" value="${escHtmlPO(item.uom)}" placeholder="e.g. pcs"
                  oninput="poState.draft.items[${i}].uom=this.value">
         </div>
         <div>
-          <div style="font-weight:700;margin-bottom:8px">Unit Price (₹)</div>
+          <label class="item-label" for="it_price_${i}">Unit Price (₹)</label>
           <input class="input" type="number" id="it_price_${i}" value="${item.price}" min="0"
                  oninput="poState.draft.items[${i}].price=+this.value;recalcPO()">
         </div>
@@ -113,8 +113,11 @@ function poForm() {
 
   return `
     <!-- toolbar -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px">
-      <button class="link-btn small" onclick="poState.view='list';renderActiveTab()">‹ Orders</button>
+    <div class="toolbar">
+      <button class="link-btn small" onclick="poState.view='list';renderActiveTab()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
+        Orders
+      </button>
       <button class="btn btn-primary btn-sm" onclick="poState.view='pdf';renderActiveTab()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="17" height="17"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
         Preview

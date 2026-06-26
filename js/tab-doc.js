@@ -16,16 +16,15 @@ function renderDocument() {
 function docFolderList() {
   const items = pdata.folders.length
     ? pdata.folders.map(f => `
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:22px 4px;border-bottom:1px solid var(--line);cursor:pointer"
-             onclick="docState.view='folder';docState.folderId='${f.id}';renderActiveTab()">
-          <div>
-            <div style="font-weight:800;font-size:20px">
-              <svg viewBox="0 0 24 24" fill="#f3c969" stroke="#d9a93b" stroke-width="1.5" width="22" height="22" style="vertical-align:middle;margin-right:8px"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+        <div class="row-item" onclick="docState.view='folder';docState.folderId='${f.id}';renderActiveTab()">
+          <div class="row-item-body">
+            <div class="row-item-title">
+              <svg viewBox="0 0 24 24" fill="#f3c969" stroke="#d9a93b" stroke-width="1.5" width="22" height="22" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
               ${f.name}
             </div>
-            <div class="faint" style="font-size:15px;margin-top:6px;padding-left:30px">${f.date}</div>
+            <div class="row-item-date row-item-indent">${f.date}</div>
           </div>
-          <button class="trash" style="font-size:24px" onclick="event.stopPropagation();deleteFolder('${f.id}')">🗑️</button>
+          <button class="icon-btn-danger" onclick="event.stopPropagation();deleteFolder('${f.id}')" aria-label="Delete folder" title="Delete folder">${icon('trash')}</button>
         </div>`).join('')
     : emptyText('No folders yet. Tap "+ Create Folder" to start.');
 
@@ -48,19 +47,19 @@ function docFolderDetail() {
 
   const files = f.files.length
     ? f.files.map(fl => `
-        <div class="list-card" style="cursor:default">
-          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
-            <div style="display:flex;gap:12px;align-items:flex-start">
-              <span style="flex:0 0 26px;margin-top:2px">${fileIcon(fl)}</span>
-              <div>
-                <div style="color:var(--link);font-weight:700;font-size:18px">${fl.name}</div>
-                <div class="muted" style="margin-top:4px;font-size:15px">${fl.desc}</div>
-                <div class="faint" style="font-size:13px;margin-top:4px">${fl.date}</div>
+        <div class="list-card file-card">
+          <div class="file-card-inner">
+            <div class="file-card-info">
+              <span class="file-icon">${fileIcon(fl)}</span>
+              <div style="min-width:0">
+                <div class="file-name">${fl.name}</div>
+                <div class="file-desc muted">${fl.desc}</div>
+                <div class="file-date faint">${fl.date}</div>
               </div>
             </div>
-            <div style="display:flex;gap:14px;align-items:center;flex:0 0 auto">
-              <button style="background:none;border:0;cursor:pointer;font-size:22px" onclick="toast('Previewing file')">👁️</button>
-              <button class="trash" style="font-size:22px" onclick="deleteFile('${f.id}','${fl.id}')">🗑️</button>
+            <div class="file-actions">
+              <button class="icon-btn-muted" onclick="toast('Previewing file')" aria-label="Preview file" title="Preview">${icon('eye')}</button>
+              <button class="icon-btn-danger" onclick="deleteFile('${f.id}','${fl.id}')" aria-label="Delete file" title="Delete">${icon('trash')}</button>
             </div>
           </div>
         </div>`)
@@ -72,16 +71,16 @@ function docFolderDetail() {
       </div>`;
 
   return `
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+    <div class="toolbar">
       <button class="link-btn small" onclick="docState.view='list';renderActiveTab()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
         Back
       </button>
-      <span style="font-weight:800;font-size:18px">
-        <svg viewBox="0 0 24 24" fill="#f3c969" stroke="#d9a93b" stroke-width="1.5" width="20" height="20" style="vertical-align:middle"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+      <span style="font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px">
+        <svg viewBox="0 0 24 24" fill="#f3c969" stroke="#d9a93b" stroke-width="1.5" width="20" height="20" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
         ${f.name}
       </span>
-      <span style="width:60px"></span>
+      <span></span>
     </div>
 
     <button class="btn btn-primary btn-block" style="margin-bottom:18px" onclick="simulateUpload('${f.id}')">+ Upload File</button>

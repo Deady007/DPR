@@ -22,15 +22,14 @@ function renderSOP() {
 /* ── SOP List ── */
 function sopList() {
   const rows = pdata.sop.map(s => `
-    <div style="display:flex;align-items:center;justify-content:space-between;
-                padding:22px 2px;border-bottom:1px solid var(--line);cursor:pointer"
+    <div class="row-item"
          onclick="sopState.sopId='${s.id}';sopState.view='detail';sopState.sub='checkpoints';sopState.editMode=false;renderActiveTab()">
-      <div>
-        <div style="color:var(--link);font-weight:800;font-size:21px">${s.id}</div>
-        <div class="muted" style="margin-top:8px;font-size:16px">Structure: ${s.structure}</div>
-        <div class="faint" style="font-size:14px;margin-top:5px">${s.date}</div>
+      <div class="row-item-body">
+        <div class="row-item-title">${s.id}</div>
+        <div class="row-item-sub">Structure: ${s.structure}</div>
+        <div class="row-item-date">${s.date}</div>
       </div>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+      <svg class="row-item-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <polyline points="9 18 15 12 9 6"/>
       </svg>
     </div>`).join('') || emptyText('No SOPs yet. Tap "+ Add SOP" to create one.');
