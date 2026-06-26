@@ -70,16 +70,16 @@ function queryDetail() {
 
     <!-- meta card -->
     <div class="info-card" style="margin-bottom:24px">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <div style="font-weight:800;font-size:20px">Query No :</div>
-        <div style="font-size:20px">${q.id}</div>
+      <div class="query-meta-row">
+        <span class="qm-label">Query No</span>
+        <span class="qm-value">${q.id}</span>
       </div>
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:16px">
-        <div style="font-weight:800;font-size:20px">Query Date:</div>
-        <div style="font-size:20px">${q.date}</div>
+      <div class="query-meta-row">
+        <span class="qm-label">Query Date</span>
+        <span class="qm-value">${q.date}</span>
       </div>
-      <div style="display:flex;justify-content:flex-end;margin-top:18px">
-        <button class="btn btn-primary" onclick="showDatePicker('${q.date}', v=>{ curQuery().date=v; renderActiveTab(); })">Edit Date</button>
+      <div style="display:flex;justify-content:flex-end;margin-top:14px">
+        <button class="btn btn-primary btn-sm" onclick="showDatePicker('${q.date}', v=>{ curQuery().date=v; renderActiveTab(); })">Edit Date</button>
       </div>
     </div>
 
@@ -92,29 +92,33 @@ function queryRepliesBlock(q) {
   const header = `
     <div class="section-head" style="margin-bottom:16px">
       <h2 style="font-size:24px">Query &amp; Replies</h2>
-      <button class="trash" onclick="clearQueryRows('${q.id}')">🗑️</button>
+      <button class="icon-btn-danger" onclick="clearQueryRows('${q.id}')" aria-label="Clear all replies" title="Clear all">${icon('trash')}</button>
     </div>`;
 
   if (queryState.editMode) {
     /* Edit mode: inline inputs */
     const tableRows = q.rows.map((r, i) => `
-      <div style="display:flex;gap:10px;padding:12px 0;align-items:flex-start;border-bottom:1px solid var(--line-soft)">
-        <div style="width:36px;font-weight:800;padding-top:18px">${i + 1}</div>
-        <div style="flex:1"><input class="input" id="qRow_q_${i}" value="${escHtml(r.q)}"></div>
-        <div style="flex:1"><input class="input" id="qRow_r_${i}" value="${escHtml(r.r)}"></div>
+      <div class="q-row">
+        <div class="q-row-num">${i + 1}</div>
+        <div class="q-row-cell"><input class="input" id="qRow_q_${i}" value="${escHtml(r.q)}"></div>
+        <div class="q-row-cell"><input class="input" id="qRow_r_${i}" value="${escHtml(r.r)}"></div>
       </div>`).join('');
 
     return header + `
-      <div style="display:flex;justify-content:flex-end;gap:10px;margin-bottom:14px">
+      <div class="toolbar" style="margin-bottom:14px">
         <button class="btn btn-ghost btn-sm" onclick="queryAddRow('${q.id}')">+ Add Row</button>
-        <button class="btn btn-light btn-sm" onclick="queryState.editMode=false;renderActiveTab()">Cancel</button>
-        <button class="btn btn-primary btn-sm" onclick="querySaveRows('${q.id}')">Save</button>
-      </div>
-      <div class="list-card" style="cursor:default">
-        <div style="display:flex;font-weight:800;padding-bottom:12px;border-bottom:1px solid var(--line-soft);gap:10px">
-          <div style="width:36px">Sr.</div><div style="flex:1">Query</div><div style="flex:1">Reply</div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-light btn-sm" onclick="queryState.editMode=false;renderActiveTab()">Cancel</button>
+          <button class="btn btn-primary btn-sm" onclick="querySaveRows('${q.id}')">Save</button>
         </div>
-        ${tableRows || '<div class="empty-text" style="padding:20px 0">No rows yet. Tap "+ Add Row".</div>'}
+      </div>
+      <div class="q-table">
+        <div class="q-table-head">
+          <div class="q-row-num">Sr.</div>
+          <div class="q-row-cell">Query</div>
+          <div class="q-row-cell">Reply</div>
+        </div>
+        ${tableRows || '<div class="empty-text" style="padding:20px 16px">No rows yet. Tap "+ Add Row".</div>'}
       </div>`;
   }
 
@@ -129,20 +133,18 @@ function queryRepliesBlock(q) {
   }
 
   const tableRows = q.rows.map((r, i) => `
-    <div style="display:flex;gap:10px;padding:12px 0;align-items:flex-start;border-bottom:1px solid var(--line-soft)">
-      <div style="width:36px;font-weight:800;padding-top:14px">${i + 1}</div>
-      <div style="flex:1">
-        <div class="pseudo-input" style="background:#fff;border-color:var(--line-soft)">${escHtml(r.q)}</div>
-      </div>
-      <div style="flex:1">
-        <div class="pseudo-input" style="background:#fff;border-color:var(--line-soft)">${escHtml(r.r)}</div>
-      </div>
+    <div class="q-row">
+      <div class="q-row-num">${i + 1}</div>
+      <div class="q-row-cell"><div class="pseudo-input">${escHtml(r.q)}</div></div>
+      <div class="q-row-cell"><div class="pseudo-input">${escHtml(r.r)}</div></div>
     </div>`).join('');
 
   return header + editBtn + `
-    <div class="list-card" style="cursor:default">
-      <div style="display:flex;font-weight:800;padding-bottom:12px;border-bottom:1px solid var(--line-soft);gap:10px">
-        <div style="width:36px">Sr.</div><div style="flex:1">Query</div><div style="flex:1">Reply</div>
+    <div class="q-table">
+      <div class="q-table-head">
+        <div class="q-row-num">Sr.</div>
+        <div class="q-row-cell">Query</div>
+        <div class="q-row-cell">Reply</div>
       </div>
       ${tableRows}
     </div>`;
