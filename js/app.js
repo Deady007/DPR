@@ -2,6 +2,18 @@
    Shared app behaviours
    ========================================================= */
 
+if (typeof icon !== 'function') {
+  var icon = function (name) {
+    const fallbackIcons = {
+      back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+      menu: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></svg>'
+    };
+    return fallbackIcons[name] || '';
+  };
+}
+if (typeof window !== 'undefined') window.icon = icon;
+if (typeof globalThis !== 'undefined') globalThis.icon = icon;
+
 /* ---- URL params ---- */
 function qp(name, fallback) {
   const v = new URLSearchParams(location.search).get(name);
