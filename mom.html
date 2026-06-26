@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Minutes Of Meeting — Shreemay</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+function renderMeetings(filter = "") {
+  const f = filter.toLowerCase();
+  const list = DB.meetings.filter(m =>
+    m.topic.toLowerCase().includes(f) || m.project.toLowerCase().includes(f) || m.organizer.toLowerCase().includes(f));
+  document.getElementById('momCount').textContent = `${list.length} result${list.length === 1 ? '' : 's'}`;
+  if (!list.length) return `<tr><td colspan="2" class="muted" style="text-align:center;padding:30px">No meetings found.</td></tr>`;
+  return list.map(m => `
+    <tr onclick="go('mom-detail.html?id=${m.id}')">
+      <td class="cell-title">${m.topic}</td>
+      <td>${m.project}</td>
+    </tr>`).join('');
+}
+
+const content = `
+<main class="screen">
+  <input class="search" id="momSearch" placeholder="Search by topic, project, organizer...">
+  <div class="toolbar" style="margin-top:18px">
+    <span class="results-count" id="momCount"></span>
+    <button class="btn btn-primary" onclick="openOverlay('newMeeting')">${icon('plus')} New Meeting</button>
+  </div>
+  <table class="dtable">
+    <thead><tr><th>Topic</th><th>Project</th></tr></thead>
+    <tbody id="momBody"></tbody>
+  </table>
+</main>
+
+<!-- New Meeting bottom sheet -->
+<div class="overlay" id="newMeeting" onclick="overlayBackdrop(event,'newMeeting')">
+  <div class="sheet">
+    <h3>New Meeting</h3>
+    <div class="field">
+      <label>Topic <span class="req">*</span></label>
+      <input class="input" placeholder="Enter topic">
+    </div>
+    <div class="field">
+      <label>Location</label>
+      <input class="input" placeholder="Enter location">
+    </div>
+    <div class="field">
+      <label>Type</label>
+      <select class="select placeholder" onchange="this.classList.remove('placeholder')">
+        <option value="">--Select--</option>
+        <option>Physical</option>
+        <option>Virtual</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Organizer</label>
+      <input class="input" placeholder="Search employee...">
+    </div>
+    <div class="field">
+      <label>Start Time</label>
+      <div class="pseudo-input select-look" onclick="showDatePicker('', v => this.querySelector('span').textContent = v + ' 09:00 AM')">
+        <span class="ph">Select start time</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>End Time</label>
+      <div class="pseudo-input select-look" onclick="showDatePicker('', v => this.querySelector('span').textContent = v + ' 10:00 AM')">
+        <span class="ph">Select end time</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Project</label>
+      <select class="select placeholder" onchange="this.classList.remove('placeholder')">
+        <option value="">--Select Project--</option>
+        ${DB.projects.map(p => `<option>${p.name}</option>`).join('')}
+      </select>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-light" onclick="closeOverlay('newMeeting')">Cancel</button>
+      <button class="btn btn-primary" onclick="closeOverlay('newMeeting');toast('Meeting saved')">Save</button>
+    </div>
+  </div>
+</div>`;
+
+mountShell(content, { title: 'MinutesOfMeeting' });
+document.getElementById('momBody').innerHTML = renderMeetings();
+document.getElementById('momSearch').addEventListener('input', e => {
+  document.getElementById('momBody').innerHTML = renderMeetings(e.target.value);
+});
+</script>
+</body>
+</html>

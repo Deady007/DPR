@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Dashboard — Shreemay</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+const momArt = `
+<svg viewBox="0 0 220 200" xmlns="http://www.w3.org/2000/svg">
+  <rect x="84" y="16" width="104" height="128" rx="6" fill="#fff" stroke="#2b3a67" stroke-width="3"/>
+  <path d="M168 16h20l-20 20z" fill="#e8edf7" stroke="#2b3a67" stroke-width="3"/>
+  <text x="98" y="44" font-family="Arial" font-size="11" font-weight="800" fill="#2b3a67">MINUTES</text>
+  <text x="98" y="58" font-family="Arial" font-size="11" font-weight="800" fill="#2b3a67">OF MEETING</text>
+  <line x1="98" y1="72" x2="150" y2="72" stroke="#3f5bd6" stroke-width="3" stroke-linecap="round"/>
+  <line x1="98" y1="88" x2="150" y2="88" stroke="#3f5bd6" stroke-width="3" stroke-linecap="round"/>
+  <line x1="98" y1="104" x2="150" y2="104" stroke="#3f5bd6" stroke-width="3" stroke-linecap="round"/>
+  <line x1="98" y1="120" x2="138" y2="120" stroke="#3f5bd6" stroke-width="3" stroke-linecap="round"/>
+  <path d="M156 70l4 4 7-8" fill="none" stroke="#3f5bd6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M156 86l4 4 7-8" fill="none" stroke="#3f5bd6" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="46" cy="44" r="20" fill="#fff" stroke="#2b3a67" stroke-width="3"/>
+  <circle cx="46" cy="44" r="20" fill="none" stroke="#3f5bd6" stroke-width="3" stroke-dasharray="3 4"/>
+  <path d="M46 34v10l7 4" fill="none" stroke="#2b3a67" stroke-width="3" stroke-linecap="round"/>
+  <rect x="24" y="78" width="14" height="80" rx="6" fill="#f3c93f" stroke="#2b3a67" stroke-width="3" transform="rotate(8 31 118)"/>
+  <path d="M22 150l6 14 8-10z" fill="#2b3a67" transform="rotate(8 31 118)"/>
+  <rect x="120" y="150" width="60" height="30" rx="4" fill="#dfe7f6" stroke="#2b3a67" stroke-width="2.5"/>
+  <path d="M140 180l-6 10 14-6z" fill="#dfe7f6" stroke="#2b3a67" stroke-width="2.5"/>
+  <circle cx="62" cy="176" r="12" fill="#fff" stroke="#2b3a67" stroke-width="3"/>
+  <path d="M44 196c0-12 8-18 18-18s18 6 18 18" fill="none" stroke="#2b3a67" stroke-width="3"/>
+  <line x1="20" y1="196" x2="150" y2="196" stroke="#2b3a67" stroke-width="3" stroke-linecap="round"/>
+</svg>`;
+
+const projArt = `
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <path d="M30 40 Q20 20 60 24 Q100 4 150 24 Q190 18 178 60 Q196 110 170 150 Q186 184 140 178 Q100 198 56 178 Q16 186 26 144 Q6 96 30 40 Z" fill="#cfe0f7"/>
+  <rect x="60" y="38" width="92" height="124" rx="8" fill="#fff" stroke="#2b3a67" stroke-width="4"/>
+  <rect x="86" y="28" width="40" height="22" rx="6" fill="#3f4ee8" stroke="#2b3a67" stroke-width="4"/>
+  <circle cx="106" cy="30" r="4" fill="#fff"/>
+  <circle cx="78" cy="66" r="3" fill="#2b3a67"/>
+  <circle cx="78" cy="92" r="3" fill="#2b3a67"/>
+  <circle cx="78" cy="118" r="3" fill="#2b3a67"/>
+  <rect x="100" y="60" width="34" height="14" rx="3" fill="#f3b73f" stroke="#2b3a67" stroke-width="3"/>
+  <rect x="100" y="86" width="34" height="14" rx="3" fill="#f3b73f" stroke="#2b3a67" stroke-width="3"/>
+  <rect x="100" y="112" width="34" height="14" rx="3" fill="#f3b73f" stroke="#2b3a67" stroke-width="3"/>
+  <path d="M92 67H86v52" fill="none" stroke="#2b3a67" stroke-width="3"/>
+  <path d="M92 93H86" stroke="#2b3a67" stroke-width="3"/>
+  <path d="M92 119H86" stroke="#2b3a67" stroke-width="3"/>
+</svg>`;
+
+const content = `
+<main class="screen">
+  <div class="dash-grid">
+    <button class="dash-card" onclick="go('mom.html')">
+      <div class="tile">${momArt}</div>
+      <div class="tile-label">Minutes Of Meeting</div>
+    </button>
+    <button class="dash-card" onclick="go('projects.html')">
+      <div class="tile">${projArt}</div>
+      <div class="tile-label">My Projects</div>
+    </button>
+  </div>
+</main>`;
+
+mountShell(content, { title: 'Dashboard' });
+</script>
+</body>
+</html>

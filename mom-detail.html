@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Meeting — Shreemay</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+const m = DB.getMeeting(qp('id')) || DB.meetings[0];
+let tab = 'agenda';
+
+function tabPanel() {
+  if (tab === 'agenda') {
+    return panel('Agenda Items', m.agenda.map((t, i) => pointCard(i + 1, 'Agenda Point', t)).join(''),
+      m.agenda.length ? '' : emptyState('No agenda items yet', 'Tap "+ Add" to create one'));
+  }
+  if (tab === 'discussed') {
+    return panel('Points Discussed', m.discussed.map((t, i) => pointCard(i + 1, 'Point Discussed', t)).join(''),
+      m.discussed.length ? '' : emptyState('No points discussed yet', 'Tap "+ Add" to create one'));
+  }
+  return panel('Points Agreed', m.agreed.map((a, i) => agreedCard(i + 1, a)).join(''),
+    m.agreed.length ? '' : emptyState('No points agreed yet', 'Tap "+ Add" to create one'));
+}
+function panel(title, cards, empty) {
+  return `
+  <div class="section-head">
+    <h2>${title}</h2>
+    <div class="actions">
+      <button class="btn btn-ghost btn-sm" onclick="toast('Edit mode')">Edit</button>
+      <button class="btn btn-primary btn-sm" onclick="toast('Add item')">${icon('plus')} Add</button>
+    </div>
+  </div>
+  ${cards || empty}`;
+}
+function pointCard(n, label, body) {
+  return `
+  <div class="point-card">
+    <div class="point-head"><span class="point-num">${n}</span><span class="point-label">${label}</span></div>
+    <div class="point-body">${body}</div>
+  </div>`;
+}
+function agreedCard(n, a) {
+  return `
+  <div class="point-card">
+    <div class="point-head"><span class="point-num green">${n}</span><span class="point-label">Point Agreed</span></div>
+    <div class="point-sub-label">REMARKS</div>
+    <div class="point-body">${a.remarks || '—'}</div>
+    <div class="facts" style="margin-top:16px">
+      <div><div class="point-sub-label" style="margin-top:0">RESPONSIBLE PERSON</div><div class="point-body">${a.person || '—'}</div></div>
+      <div><div class="point-sub-label" style="margin-top:0">COMPLETION DATE</div><div class="point-body">${a.date || '—'}</div></div>
+    </div>
+  </div>`;
+}
+function emptyState(t, s) {
+  return `<div class="empty"><div class="e-icon">${icon('file')}</div><div class="e-title">${t}</div><div class="e-sub">${s}</div></div>`;
+}
+
+function render() {
+  const seg = (id, label, n) =>
+    `<button class="seg ${tab === id ? 'active' : ''}" onclick="tab='${id}';render()">${label} <span class="pill">${n}</span></button>`;
+
+  const content = `
+  <main class="screen">
+    <div class="toolbar">
+      <button class="link-btn" onclick="go('mom.html')">${icon('backDouble')} Back</button>
+      <div class="actions" style="display:flex;gap:10px">
+        <button class="btn btn-outline btn-sm" onclick="go('mom-pdf.html?id=${m.id}')">${icon('printer')} Print</button>
+        <button class="btn btn-primary btn-sm" onclick="toast('Edit meeting')">${icon('pencil')} Edit</button>
+        <button class="btn btn-danger btn-sm" onclick="toast('Meeting deleted')">${icon('trash')} Delete</button>
+      </div>
+    </div>
+
+    <div class="detail-title">${m.topic}</div>
+    <div class="detail-sub">${m.datetime}</div>
+
+    <div class="facts">
+      <div><div class="f-label">Topic</div><div class="f-box">${m.topicField}</div></div>
+      <div><div class="f-label">Type</div><div class="f-box">${m.type}</div></div>
+      <div><div class="f-label">Location</div><div class="f-box">${m.location}</div></div>
+      <div><div class="f-label">Organizer</div><div class="f-box">${m.organizer}</div></div>
+      <div><div class="f-label">Start Time</div><div class="f-box">${m.start}</div></div>
+      <div><div class="f-label">End Time</div><div class="f-box">${m.end}</div></div>
+      <div class="full"><div class="f-label">Project</div><div class="f-box">${m.project}</div></div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="segment">
+      ${seg('agenda', 'Agenda', m.agenda.length)}
+      ${seg('discussed', 'Discussed', m.discussed.length)}
+      ${seg('agreed', 'Agreed', m.agreed.length)}
+    </div>
+
+    ${tabPanel()}
+  </main>`;
+
+  mountShell(content, { title: 'MinutesOfMeeting' });
+}
+render();
+</script>
+</body>
+</html>

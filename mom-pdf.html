@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>MoM PDF — Shreemay</title>
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="app"></div>
+
+<script src="js/icons.js"></script>
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script>
+const m = DB.getMeeting(qp('id')) || DB.meetings[0];
+
+function longDT(s) {
+  const mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  const r = /(\d{2})\/(\d{2})\/(\d{4})\s+(.*)/.exec(s);
+  if (!r) return s;
+  return `${+r[1]} ${mo[+r[2]-1]} ${r[3]}, ${r[4].toLowerCase()}`;
+}
+
+const agreementRows = m.agreed.length
+  ? m.agreed.map((a, i) => `<tr><td class="center">${i+1}</td><td>${a.remarks||''}</td><td>${a.person||''}</td><td>${a.date||''}</td></tr>`).join('')
+  : `<tr><td class="center">1</td><td></td><td></td><td></td></tr>`;
+
+const content = `
+<main class="screen doc-screen">
+  <div class="doc-toolbar">
+    <button class="link-btn" onclick="history.back()">Back</button>
+    <button class="btn btn-amber" onclick="toast('Sharing PDF…')">${icon('shareArrow')} Share PDF</button>
+  </div>
+
+  <div class="doc-paper">
+    <div class="doc-letterhead">
+      <div class="doc-brand">
+        <div class="b-name">SHREEMAY ASSOCIATES</div>
+        <div class="b-sub" style="font-style:italic;text-transform:none;letter-spacing:0;font-size:14px;margin-top:2px">Daily Progress Report</div>
+      </div>
+      <div class="doc-logo">
+        <div class="l-name">SHREEMAY</div>
+        <div class="l-sub">PROJECT MANAGEMENT | CONSTRUCTION | INTERIORS</div>
+      </div>
+    </div>
+    <hr class="doc-rule">
+
+    <div class="doc-center"><span class="doc-titlebox">MINUTES OF MEETING</span></div>
+
+    <table class="doc-meta">
+      <tr>
+        <td><div class="m-label">Meeting Name</div>${m.topic}</td>
+        <td><div class="m-label">Project</div>${m.project}</td>
+        <td><div class="m-label">Type</div>${m.type}</td>
+      </tr>
+      <tr>
+        <td><div class="m-label">Location</div>${m.location}</td>
+        <td><div class="m-label">Start Time</div>${longDT(m.start)}</td>
+        <td><div class="m-label">End Time</div>${longDT(m.end)}</td>
+      </tr>
+      <tr>
+        <td><div class="m-label">Organizer</div>${m.organizer}</td>
+        <td></td><td></td>
+      </tr>
+    </table>
+
+    <div class="doc-section-label">AGENDA</div>
+    <ol class="doc-list">${m.agenda.map(a => `<li>${a}</li>`).join('') || '<li style="list-style:none;margin-left:-18px">—</li>'}</ol>
+
+    <div class="doc-section-label">KEY DISCUSSION POINTS</div>
+    <ul class="doc-list">${m.discussed.map(d => `<li>${d}</li>`).join('') || '<li style="list-style:none;margin-left:-18px">—</li>'}</ul>
+
+    <div class="doc-section-label">AGREEMENTS &amp; ACTION ITEMS</div>
+    <table class="doc-table">
+      <thead><tr><th style="width:8%">#</th><th>REMARKS</th><th style="width:22%">OWNER</th><th style="width:28%">DUE / COMPLETION</th></tr></thead>
+      <tbody>${agreementRows}</tbody>
+    </table>
+
+    <div class="doc-page-no">Page 1</div>
+  </div>
+</main>`;
+
+mountShell(content, { title: 'MinutesOfMeeting' });
+</script>
+</body>
+</html>
