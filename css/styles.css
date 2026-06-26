@@ -87,26 +87,6 @@ img { max-width: 100%; display: block; }
   }
 }
 
-/* ---------- Simulated status bar ---------- */
-.statusbar {
-  height: 34px;
-  flex: 0 0 34px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  font-size: 15px;
-  font-weight: 600;
-  color: #111;
-  background: var(--bg);
-  user-select: none;
-}
-.statusbar .sb-time { letter-spacing: .3px; }
-.statusbar .sb-right { display: flex; align-items: center; gap: 6px; opacity: .85; }
-.statusbar .sb-right svg { width: 17px; height: 17px; }
-.statusbar .sb-net { font-size: 10px; line-height: 1; text-align: right; }
-.statusbar .sb-net b { display: block; font-weight: 700; }
-
 /* ---------- Top app bar ---------- */
 .appbar {
   flex: 0 0 auto;

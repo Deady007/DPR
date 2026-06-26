@@ -21,23 +21,6 @@ function qp(name, fallback) {
 }
 function go(url) { location.href = url; }
 
-/* ---- Status bar (simulated) ---- */
-function statusBarHTML() {
-  const now = new Date();
-  const t = now.getHours().toString().padStart(2, "0") + ":" + now.getMinutes().toString().padStart(2, "0");
-  return `
-  <div class="statusbar">
-    <span class="sb-time">${t}</span>
-    <span class="sb-right">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2"/><path d="M5 3 2 6"/><path d="M22 6l-3-3"/></svg>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 12l5-3"/></svg>
-      <span class="sb-net"><b>VoNR2</b></span>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h3v3H2zM7 13h3v7H7zM12 9h3v11h-3zM17 5h3v15h-3z"/></svg>
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 17h3v3H2zM7 13h3v7H7zM12 9h3v11h-3zM17 5h3v15h-3z"/></svg>
-    </span>
-  </div>`;
-}
-
 /* ---- Top app bar (with hamburger -> opens drawer) ---- */
 function appBarHTML(title, opts = {}) {
   const left = opts.back
@@ -210,7 +193,6 @@ function fmtDMY(d) {
 function mountShell(content, opts = {}) {
   const app = document.querySelector('.app');
   app.innerHTML =
-    statusBarHTML() +
     appBarHTML(opts.title || '', opts) +
     content +
     drawerHTML() +
