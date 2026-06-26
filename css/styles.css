@@ -364,26 +364,36 @@ img { max-width: 100%; display: block; }
 .form-actions { display: flex; justify-content: flex-end; gap: 14px; margin-top: 24px; }
 
 /* ---------- Project tab bar ---------- */
-.tabbar {
-  flex: 0 0 auto;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
+/* ---------- Project sidebar drawer ---------- */
+.project-drawer .pd-head {
+  padding: 24px 22px;
+  background: var(--primary);
+  color: #fff;
+}
+.project-drawer .pd-project-name {
+  font-size: 20px; font-weight: 800; margin-bottom: 4px;
+}
+.project-drawer .pd-sub {
+  font-size: 13px; opacity: .8;
+}
+.project-drawer .pd-item {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 22px;
+  cursor: pointer;
+  font-size: 17px; font-weight: 600;
+  color: var(--ink);
+  border-bottom: 1px solid var(--line-soft);
+  transition: background .12s ease;
+}
+.project-drawer .pd-item svg { color: var(--ink-soft); flex: 0 0 24px; }
+.project-drawer .pd-item:hover { background: var(--bg-soft); }
+.project-drawer .pd-item.active {
+  color: var(--primary); font-weight: 800;
   background: var(--bg-soft);
-  border-bottom: 1px solid var(--line);
+  border-left: 4px solid var(--primary);
+  padding-left: 18px;
 }
-.tabbar .tab {
-  background: none; border: 0; cursor: pointer;
-  padding: 14px 4px 12px;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  color: var(--muted); font-size: 15px; font-weight: 500;
-  position: relative;
-}
-.tabbar .tab svg { width: 26px; height: 26px; }
-.tabbar .tab.active { color: var(--primary); }
-.tabbar .tab.active::after {
-  content: ""; position: absolute; left: 14%; right: 14%; bottom: -1px; height: 3px;
-  background: var(--primary); border-radius: 3px 3px 0 0;
-}
+.project-drawer .pd-item.active svg { color: var(--primary); }
 
 /* ---------- Sub-tab pills (segmented) ---------- */
 .segment {
@@ -895,9 +905,15 @@ hr.soft { border:0; border-top:1px solid var(--line); margin: 20px 0; }
 .la-emp-name  { font-size: 17px; font-weight: 800; }
 .la-meta { font-size: 14px; color: var(--muted); line-height: 1.8; }
 
-/* ---------- Tabbar scrollable ---------- */
-.tabbar { overflow-x: auto; -webkit-overflow-scrolling: touch; scroll-snap-type: x mandatory; }
-.tabbar .tab { scroll-snap-align: start; flex-shrink: 0; }
+/* ---------- Badge as button (status cycle) ---------- */
+.badge-btn {
+  border: 0; cursor: pointer; font-family: inherit; line-height: 1.4;
+  transition: opacity .1s ease, box-shadow .1s ease;
+}
+.badge-btn:hover  { opacity: .82; }
+.badge-btn:active { opacity: .65; }
+.badge-btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; border-radius: 99px; }
+.pw-status-hint { font-size: 12px; color: var(--faint); align-self: center; }
 
 /* ---------- Chatbot ---------- */
 .chat-screen {

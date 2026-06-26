@@ -7,6 +7,7 @@ const pendingState = {
   view: 'list',
   itemId: null,
   isNew: false,
+  filter: 'All',
 };
 
 function renderPending() {
@@ -20,17 +21,8 @@ function renderPending() {
 /* ── List ── */
 function pendingList() {
   const items = pdata.pendingWorks;
-  const open   = items.filter(x => x.status !== 'Done').length;
-  const rows = items.map(p => `
-    <div class="pw-card" onclick="pendingState.itemId='${p.id}';pendingState.view='detail';renderActiveTab()">
-      <div class="pw-card-top">
-        <span class="badge-pill ${priorityClass(p.priority)}">${p.priority}</span>
-        <span class="badge-pill ${statusClass(p.status)}">${p.status}</span>
-      </div>
-      <div class="pw-title">${escPending(p.title)}</div>
-      ${p.dueDate ? `<div class="pw-due">Due: ${p.dueDate}</div>` : ''}
-      ${p.attachments.length ? `<div class="pw-att-count">${p.attachments.length} attachment${p.attachments.length > 1 ? 's' : ''}</div>` : ''}
-    </div>`).join('') || emptyText('No pending work points. Tap "+ Add" to create one.');
+  const open  = items.filter(x => x.status !== 'Done').length;
+  const rows  = pendingRows(items);
 
   return `
     <div class="pw-list-header">
@@ -47,27 +39,28 @@ function pendingList() {
     <div id="pwRows">${rows}</div>`;
 }
 
-const _pwFiltered = [];
-pendingState.filter = 'All';
+function pendingRows(items) {
+  return items.map(p => `
+    <div class="pw-card" onclick="pendingState.itemId='${p.id}';pendingState.view='detail';renderActiveTab()">
+      <div class="pw-card-top">
+        <span class="badge-pill ${priorityClass(p.priority)}">${p.priority}</span>
+        <button class="badge-pill badge-btn ${statusClass(p.status)}"
+                onclick="cycleStatus('${p.id}');event.stopPropagation()"
+                title="Tap to change status">${p.status}</button>
+      </div>
+      <div class="pw-title">${escPending(p.title)}</div>
+      ${p.dueDate ? `<div class="pw-due">Due: ${p.dueDate}</div>` : ''}
+      ${p.attachments.length ? `<div class="pw-att-count">${p.attachments.length} attachment${p.attachments.length > 1 ? 's' : ''}</div>` : ''}
+    </div>`).join('') || emptyText('No pending work points. Tap "+ Add" to create one.');
+}
+
 function pendingSetFilter(f) {
   pendingState.filter = f;
   const items = f === 'All'
     ? pdata.pendingWorks
     : pdata.pendingWorks.filter(p => p.status === f);
-  const html = items.map(p => `
-    <div class="pw-card" onclick="pendingState.itemId='${p.id}';pendingState.view='detail';renderActiveTab()">
-      <div class="pw-card-top">
-        <span class="badge-pill ${priorityClass(p.priority)}">${p.priority}</span>
-        <span class="badge-pill ${statusClass(p.status)}">${p.status}</span>
-      </div>
-      <div class="pw-title">${escPending(p.title)}</div>
-      ${p.dueDate ? `<div class="pw-due">Due: ${p.dueDate}</div>` : ''}
-    </div>`).join('') || emptyText(`No ${f.toLowerCase()} items.`);
-
-  /* re-render just the rows for instant filter feel */
   const el = document.getElementById('pwRows');
-  if (el) { el.innerHTML = html; }
-  /* also update filter buttons */
+  if (el) el.innerHTML = pendingRows(items);
   document.querySelectorAll('.pw-filter').forEach(b => b.classList.toggle('active', b.textContent === f));
 }
 
@@ -89,13 +82,16 @@ function pendingDetail() {
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" width="20" height="20" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
         Back
       </button>
-      <button class="btn btn-primary btn-sm" onclick="pendingEditForm('${p.id}')">Edit</button>
+      <button class="btn btn-primary btn-sm" onclick="pendingEditForm('${p.id}')">Edit Details</button>
     </div>
 
     <div class="info-card" style="margin-bottom:20px">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:12px">
         <span class="badge-pill ${priorityClass(p.priority)}">${p.priority} Priority</span>
-        <span class="badge-pill ${statusClass(p.status)}">${p.status}</span>
+        <button class="badge-pill badge-btn ${statusClass(p.status)}"
+                onclick="cycleStatus('${p.id}')"
+                title="Tap to change status">${p.status}</button>
+        <span class="pw-status-hint">tap status to change</span>
       </div>
       <div style="font-size:20px;font-weight:800;margin-bottom:10px;line-height:1.35">${escPending(p.title)}</div>
       ${p.dueDate ? `<div class="pw-due" style="margin-bottom:10px">Due: ${p.dueDate}</div>` : ''}
@@ -127,7 +123,7 @@ function pendingEditForm(id) {
 }
 
 function pendingForm() {
-  const p = pendingState.isNew ? null : curPending();
+  const p           = pendingState.isNew ? null : curPending();
   const title       = p?.title       || '';
   const description = p?.description || '';
   const priority    = p?.priority    || 'Medium';
@@ -174,7 +170,7 @@ function pendingForm() {
 
     <div class="field">
       <label class="item-label">Due Date</label>
-      <div class="pseudo-input select-look" id="pw_dueDateBtn" onclick="pickPendingDate()">
+      <div class="pseudo-input select-look" onclick="pickPendingDate()">
         <span id="pw_dueDateVal" class="${dueDate ? '' : 'ph'}">${dueDate || 'Select date'}</span>
       </div>
     </div>
@@ -187,6 +183,17 @@ function pendingForm() {
     <div style="margin-top:16px;text-align:center">
       <button class="btn btn-danger btn-sm" onclick="pendingDelete('${p.id}')">Delete Work Point</button>
     </div>` : ''}`;
+}
+
+/* ── Status cycle (one-tap) ── */
+const STATUS_CYCLE = ['Open', 'In Progress', 'Done'];
+function cycleStatus(id) {
+  const p = pdata.pendingWorks.find(x => x.id === id);
+  if (!p) return;
+  const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(p.status) + 1) % STATUS_CYCLE.length];
+  p.status = next;
+  toast(next);
+  renderActiveTab();
 }
 
 /* ── CRUD helpers ── */
@@ -256,6 +263,6 @@ function pickPendingDate() {
 /* helpers */
 function curPending() { return pdata.pendingWorks.find(p => p.id === pendingState.itemId); }
 function priorityClass(p) { return p === 'High' ? 'badge-high' : p === 'Medium' ? 'badge-medium' : 'badge-low'; }
-function statusClass(s) { return s === 'Open' ? 'badge-open' : s === 'In Progress' ? 'badge-in-progress' : 'badge-done'; }
+function statusClass(s)   { return s === 'Open' ? 'badge-open' : s === 'In Progress' ? 'badge-in-progress' : 'badge-done'; }
 function escPending(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function escAttr(s) { return String(s || '').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+function escAttr(s)    { return String(s || '').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
