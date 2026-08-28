@@ -2,24 +2,25 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* ---------------------------------------------------------------
-   Crochet store tokens.
-   Five colours, three faces. Everything else derives from them via
-   color-mix — no ad-hoc values, no sixth colour, no gradients.
-   --------------------------------------------------------------- */
+/* ---------------------------------------------------------------------------
+   Crochet store — dark material theme.
+
+   The brief's five colours are kept, but their roles invert: Deep Skein
+   deepens into the ground, Blocking Mat becomes the text, and Merino Teal,
+   Bubblegum and Mustard are held back as accents so the yarn itself is the
+   only thing that carries colour at scale.
+   --------------------------------------------------------------------------- */
 
 @theme inline {
-  /* palette, exposed as utilities: bg-ground, text-ink, text-data ... */
-  --color-ground: var(--ground);
-  --color-ink: var(--ink);
+  --color-void: var(--void);
+  --color-pitch: var(--pitch);
+  --color-bone: var(--bone);
   --color-data: var(--data);
 
-  /* type roles */
   --font-sans: var(--font-instrument);
   --font-heading: var(--font-bricolage);
   --font-mono: var(--font-martian);
 
-  /* shadcn semantic surface */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -38,88 +39,116 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-
-  /* gridlines: the store surface is a working chart */
   --color-gridline: var(--gridline);
 
-  /* pixel-snapped. no soft floaty cards. */
-  --radius-sm: 0px;
-  --radius-md: 0px;
-  --radius-lg: 0px;
-  --radius-xl: 0px;
-  --radius-2xl: 0px;
-  --radius-3xl: 0px;
-  --radius-4xl: 0px;
+  /* Crafted, not crude: a hair of radius rather than none. */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 4px;
+  --radius-xl: 8px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-4xl: 22px;
 }
 
 :root {
-  /* ---- the five. no others. ---- */
-  --ground: #f1eff4; /* Blocking Mat      — background, cool grey-lilac */
-  --ink: #221c2a; /* Deep Skein        — all text                  */
-  --primary: #1f7a6b; /* Merino Teal       — primary actions          */
-  --accent: #e8548a; /* Bubblegum Acrylic — accent, category code    */
-  --data: #f0b429; /* Mustard 4-ply     — data and utility only    */
+  /* ---- ground ---- */
+  --void: #08070a; /* deepest ground, violet-black  */
+  --pitch: #100e15; /* raised surface                */
+  --ink: #221c2a; /* Deep Skein — borders, wells   */
+  --bone: #f1eff4; /* Blocking Mat — now the text   */
 
-  /* ---- category codes: the three product lines ---- */
+  /* ---- the three yarn colours ---- */
+  --primary: #1f7a6b; /* Merino Teal       */
+  --accent: #e8548a; /* Bubblegum Acrylic */
+  --data: #f0b429; /* Mustard 4-ply     */
+
   --cat-pins: var(--accent);
   --cat-bows: var(--primary);
   --cat-toys: var(--data);
 
-  /* ---- derived surface. every value mixes the five. ---- */
-  --background: var(--ground);
-  --foreground: var(--ink);
-  --card: var(--ground);
-  --card-foreground: var(--ink);
-  --popover: var(--ground);
-  --popover-foreground: var(--ink);
-  --primary-foreground: var(--ground);
-  --secondary: color-mix(in oklab, var(--ink) 6%, var(--ground));
-  --secondary-foreground: var(--ink);
-  --muted: color-mix(in oklab, var(--ink) 7%, var(--ground));
-  --muted-foreground: color-mix(in oklab, var(--ink) 58%, var(--ground));
-  --accent-foreground: var(--ground);
+  /* ---- derived surface ---- */
+  --background: var(--void);
+  --foreground: var(--bone);
+  --card: var(--pitch);
+  --card-foreground: var(--bone);
+  --popover: var(--pitch);
+  --popover-foreground: var(--bone);
+  --primary-foreground: var(--bone);
+  --secondary: color-mix(in oklab, var(--bone) 9%, var(--void));
+  --secondary-foreground: var(--bone);
+  --muted: color-mix(in oklab, var(--bone) 7%, var(--void));
+  --muted-foreground: color-mix(in oklab, var(--bone) 52%, var(--void));
+  --accent-foreground: var(--void);
   --destructive: var(--accent);
-  --border: color-mix(in oklab, var(--ink) 14%, var(--ground));
-  --input: color-mix(in oklab, var(--ink) 22%, var(--ground));
-  --ring: var(--primary);
+  --border: color-mix(in oklab, var(--bone) 13%, var(--void));
+  --input: color-mix(in oklab, var(--bone) 18%, var(--void));
+  --ring: color-mix(in oklab, var(--bone) 70%, var(--void));
+  --gridline: color-mix(in oklab, var(--bone) 11%, var(--void));
 
-  /* hairline gridline, visible but quiet */
-  --gridline: color-mix(in oklab, var(--ink) 16%, var(--ground));
-
-  --radius: 0px;
+  --radius: 4px;
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
-  body {
-    @apply bg-background text-foreground font-sans antialiased;
-  }
+
   html {
     @apply font-sans;
+    /* lenis drives scrolling; native smooth would fight it */
+    scroll-behavior: auto;
   }
-  /* Display face uses Bricolage's width axis — tight, high tension. */
-  h1,
-  h2,
-  h3 {
-    font-family: var(--font-heading);
-    font-variation-settings: "wdth" 85;
-    letter-spacing: -0.02em;
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    -webkit-font-smoothing: antialiased;
   }
+
+  ::selection {
+    background: var(--accent);
+    color: var(--void);
+  }
+
   /*
    * Reveals must never be able to hide content.
    *
    * The server cannot know the motion preference, so it emits the hidden
    * initial state. This overrides it in CSS — !important beats the inline
-   * style, and it applies before hydration, so a reduced-motion visitor never
-   * sees a blank grid even if JavaScript never arrives.
+   * style and applies before hydration, so a reduced-motion visitor never sees
+   * a blank section even if JavaScript never arrives.
    */
   @media (prefers-reduced-motion: reduce) {
     .motion-reveal {
       opacity: 1 !important;
       transform: none !important;
     }
+  }
+
+  /* Display face. Bricolage's width axis, run narrow and tight at scale. */
+  .display {
+    font-family: var(--font-heading);
+    font-variation-settings: "wdth" 82;
+    letter-spacing: -0.035em;
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    font-variation-settings: "wdth" 86;
+    letter-spacing: -0.02em;
+  }
+
+  /* Small mono label. Wide tracking is what makes it read as a spec, not text. */
+  .label {
+    font-family: var(--font-mono);
+    font-size: 0.625rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted-foreground);
   }
 
   /* The stitch line: every product's real craft data. */
@@ -130,4 +159,27 @@
     color: var(--muted-foreground);
     font-variant-numeric: tabular-nums;
   }
+
+  /* Film grain. Keeps large fields of near-black from banding. */
+  .grain::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 60;
+    pointer-events: none;
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+}
+
+/* lenis owns the scroll position; these keep it from fighting the document. */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }

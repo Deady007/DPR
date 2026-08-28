@@ -30,6 +30,19 @@ export const SWATCH_VAR: Record<Swatch, string> = {
   ink: "var(--ink)",
 };
 
+/**
+ * Real hex values for the WebGL material, which cannot read CSS variables.
+ * Deep Skein is lifted here — at #221C2A a strand would vanish into the void.
+ */
+export const SWATCH_HEX: Record<Swatch, string> = {
+  primary: "#1f7a6b",
+  accent: "#e8548a",
+  data: "#f0b429",
+  // Lifted well clear of #221C2A: this value is also used as hover text on the
+  // dark ground, and the true Deep Skein is unreadable there.
+  ink: "#7d6f93",
+};
+
 export const CATEGORY_VAR: Record<Category, string> = {
   pins: "var(--cat-pins)",
   bows: "var(--cat-bows)",

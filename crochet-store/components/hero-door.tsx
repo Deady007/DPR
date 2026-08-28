@@ -2,24 +2,18 @@
 
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
-import { Button } from "@/components/ui/button";
-import { StitchGridAnimated } from "@/components/stitch-grid-animated";
-import { SWATCH_VAR, knotFor, theBow } from "@/lib/products";
+import { setDive } from "@/lib/yarn-signal";
 
 /**
  * The hero, and the door.
  *
- * The bow crochets itself in on load, one row at a time. That is the one bold
- * element on this page.
- *
- * Opening the door zooms the stitch grid so the catalogue emerges from the
- * fabric of the hero, then routes. Transform and opacity only. Under
- * prefers-reduced-motion the animation is skipped and the door simply routes.
+ * No veil and almost no furniture — the strand behind is the hero, and the type
+ * sits at the edges of it. Opening the door drives the camera into the yarn and
+ * then routes, so the catalogue arrives from inside the fabric. Under
+ * prefers-reduced-motion the door simply routes.
  */
 export function HeroDoor() {
   const router = useRouter();
-  const reduced = useReducedMotion();
   const [opening, setOpening] = useState(false);
 
   useEffect(() => {
@@ -27,64 +21,84 @@ export function HeroDoor() {
   }, [router]);
 
   const open = useCallback(() => {
-    if (reduced) {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       router.push("/store");
       return;
     }
     setOpening(true);
-    window.setTimeout(() => router.push("/store"), 520);
-  }, [reduced, router]);
+    setDive(true);
+    window.setTimeout(() => router.push("/store"), 640);
+  }, [router]);
+
+  useEffect(() => () => setDive(false), []);
 
   return (
-    <section className="mx-auto w-full max-w-6xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28">
-      <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
-        <div className="order-2 lg:order-1">
-          <h1 className="text-4xl leading-[1.05] sm:text-5xl lg:text-6xl">
-            Every stitch is
-            <br />
-            counted before
-            <br />
-            it is sold.
-          </h1>
+    <section className="relative flex min-h-[100svh] flex-col justify-between px-5 pt-28 pb-10 sm:px-10 sm:pb-14">
+      <div className="max-w-[38rem]">
+        <p className="label">handmade to order · india</p>
 
-          <p className="mt-6 max-w-sm text-base leading-relaxed text-muted-foreground">
-            Pins, bows and amigurumi, worked one row at a time in India. Nothing
-            is mass-made, so nothing pretends to be in stock.
-          </p>
-
-          <div className="mt-8">
-            <Button size="lg" onClick={open} className="px-4">
-              Enter the workroom
-            </Button>
-            <p className="mt-3 font-mono text-[0.625rem] tracking-[0.1em] uppercase text-muted-foreground">
-              no account needed
-            </p>
-          </div>
-        </div>
-
-        {/* the chart, and the zoom that opens it */}
-        <motion.div
-          className="order-1 origin-center will-change-transform lg:order-2"
-          animate={
-            opening
-              ? { scale: 7, opacity: 0 }
-              : { scale: 1, opacity: 1 }
-          }
-          transition={{ duration: 0.52, ease: [0.7, 0, 0.84, 0] }}
-        >
-          <StitchGridAnimated
-            chart={theBow.chart}
-            bodyColor={SWATCH_VAR[theBow.colourway.swatch]}
-            knotColor={knotFor(theBow.colourway.swatch)}
-            label="A bow worked as a graphgan chart, appearing one row at a time"
-            delay={0.2}
-          />
-          <p className="stitch-line mt-3">
-            {theBow.chart[0].length} sts across · {theBow.chart.length} rows ·
-            worked bottom-up
-          </p>
-        </motion.div>
+        <h1 className="display mt-6 text-[clamp(3.25rem,10vw,8rem)]">
+          Every
+          <br />
+          stitch
+          <br />
+          counted.
+        </h1>
       </div>
+
+      <div className="flex flex-wrap items-end justify-between gap-8">
+        <p className="max-w-xs text-sm leading-relaxed text-muted-foreground">
+          Pins, bows and amigurumi, worked by hand in India. Made to order, so
+          nothing here pretends to be in stock.
+        </p>
+
+        <div className="flex flex-col items-start gap-3">
+          <button
+            type="button"
+            onClick={open}
+            disabled={opening}
+            className="group relative overflow-hidden border border-border px-7 py-4 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-ring"
+          >
+            {/* the fill wipes in from the left, the way a row is worked */}
+            <span
+              aria-hidden
+              className="absolute inset-0 origin-left scale-x-0 bg-bone transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-x-100 group-focus-visible:scale-x-100"
+            />
+            <span className="relative font-mono text-xs tracking-[0.16em] uppercase transition-colors duration-300 group-hover:text-void group-focus-visible:text-void">
+              {opening ? "opening" : "Enter the workroom"}
+            </span>
+          </button>
+          <span className="label">no account needed</span>
+        </div>
+      </div>
+
+      {/* scroll cue */}
+      <div aria-hidden className="absolute bottom-10 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 sm:flex">
+        <span className="label">scroll</span>
+        <span className="block h-12 w-px overflow-hidden bg-border">
+          <span className="cue block h-full w-px bg-bone" />
+        </span>
+      </div>
+
+      <style jsx>{`
+        .cue {
+          animation: fall 2.1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+        @keyframes fall {
+          0% {
+            transform: translateY(-100%);
+          }
+          60%,
+          100% {
+            transform: translateY(100%);
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .cue {
+            animation: none;
+          }
+        }
+      `}</style>
     </section>
   );
 }

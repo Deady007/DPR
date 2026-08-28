@@ -2,10 +2,9 @@ import { cn } from "@/lib/utils";
 
 /**
  * Charts differ in shape — a bow is 15×9, a bear is 13×13. Fitting each into a
- * box of one aspect keeps tiles aligned across a row, so the grid reads as one
- * sheet rather than a ragged shelf.
+ * box of one aspect keeps tiles aligned across a row.
  */
-const BOX_RATIO = 3 / 4; // height ÷ width of the box a chart is fitted into
+const BOX_RATIO = 3 / 4;
 
 export function chartWidthPct(chart: string[]): number {
   const cols = chart[0]?.length ?? 1;
@@ -23,9 +22,11 @@ type Props = {
 };
 
 /**
- * A charted piece, drawn as stitches on a square grid.
+ * A charted piece, drawn stitch by stitch.
  *
- * Pixel-snapped: cells are square, gridlines are hairlines, nothing is rounded.
+ * Each stitch is its own mark with air around it, so the piece reads as worked
+ * fabric rather than as a mosaic of flat blocks. Empty cells draw nothing — the
+ * field behind supplies the grid.
  */
 export function StitchGrid({
   chart,
@@ -43,28 +44,27 @@ export function StitchGrid({
       <div
         role="img"
         aria-label={label}
-        className="grid border-t border-l border-gridline"
+        className="grid"
         style={{
           width: `${chartWidthPct(chart)}%`,
           gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))`,
         }}
       >
         {chart.flatMap((row, y) =>
-          [...row].map((cell, x) => (
-            <span
-              key={`${y}-${x}`}
-              data-row={y}
-              className="aspect-square border-r border-b border-gridline"
-              style={{
-                backgroundColor:
-                  cell === "#"
-                    ? bodyColor
-                    : cell === "@"
-                      ? knotColor
-                      : undefined,
-              }}
-            />
-          )),
+          [...row].map((cell, x) => {
+            const color =
+              cell === "#" ? bodyColor : cell === "@" ? knotColor : null;
+            return (
+              <span key={`${y}-${x}`} data-row={y} className="aspect-square p-[6%]">
+                {color && (
+                  <span
+                    className="block size-full rounded-[2px]"
+                    style={{ backgroundColor: color }}
+                  />
+                )}
+              </span>
+            );
+          }),
         )}
       </div>
     </div>

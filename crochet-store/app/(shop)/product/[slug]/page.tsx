@@ -2,11 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddToBag } from "@/components/add-to-bag";
-import { StitchGrid } from "@/components/stitch-grid";
+import { PieceField } from "@/components/piece-field";
 import {
   CATEGORY_VAR,
   SWATCH_VAR,
-  knotFor,
   bySlug,
   priceLabel,
   products,
@@ -62,12 +61,10 @@ export default async function ProductPage({
       <div className="grid gap-px bg-gridline lg:grid-cols-2">
         {/* the chart */}
         <div className="bg-card p-4 sm:p-6">
-          <StitchGrid
-            chart={product.chart}
-            bodyColor={SWATCH_VAR[product.colourway.swatch]}
-            knotColor={knotFor(product.colourway.swatch)}
-            label={`${product.name} charted in ${product.colourway.name}`}
-            className={closed ? "opacity-45" : undefined}
+          <PieceField
+            product={product}
+            dim={closed}
+            className="aspect-[4/3] w-full"
           />
           <p className="mt-4 font-mono text-[0.625rem] tracking-[0.08em] text-muted-foreground">
             Charted at {product.chart[0].length} sts across ·{" "}
