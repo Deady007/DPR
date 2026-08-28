@@ -1,0 +1,118 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* ---------------------------------------------------------------
+   Crochet store tokens.
+   Five colours, three faces. Everything else derives from them via
+   color-mix — no ad-hoc values, no sixth colour, no gradients.
+   --------------------------------------------------------------- */
+
+@theme inline {
+  /* palette, exposed as utilities: bg-ground, text-ink, text-data ... */
+  --color-ground: var(--ground);
+  --color-ink: var(--ink);
+  --color-data: var(--data);
+
+  /* type roles */
+  --font-sans: var(--font-instrument);
+  --font-heading: var(--font-bricolage);
+  --font-mono: var(--font-martian);
+
+  /* shadcn semantic surface */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* gridlines: the store surface is a working chart */
+  --color-gridline: var(--gridline);
+
+  /* pixel-snapped. no soft floaty cards. */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --radius-xl: 0px;
+  --radius-2xl: 0px;
+  --radius-3xl: 0px;
+  --radius-4xl: 0px;
+}
+
+:root {
+  /* ---- the five. no others. ---- */
+  --ground: #f1eff4; /* Blocking Mat      — background, cool grey-lilac */
+  --ink: #221c2a; /* Deep Skein        — all text                  */
+  --primary: #1f7a6b; /* Merino Teal       — primary actions          */
+  --accent: #e8548a; /* Bubblegum Acrylic — accent, category code    */
+  --data: #f0b429; /* Mustard 4-ply     — data and utility only    */
+
+  /* ---- category codes: the three product lines ---- */
+  --cat-pins: var(--accent);
+  --cat-bows: var(--primary);
+  --cat-toys: var(--data);
+
+  /* ---- derived surface. every value mixes the five. ---- */
+  --background: var(--ground);
+  --foreground: var(--ink);
+  --card: var(--ground);
+  --card-foreground: var(--ink);
+  --popover: var(--ground);
+  --popover-foreground: var(--ink);
+  --primary-foreground: var(--ground);
+  --secondary: color-mix(in oklab, var(--ink) 6%, var(--ground));
+  --secondary-foreground: var(--ink);
+  --muted: color-mix(in oklab, var(--ink) 7%, var(--ground));
+  --muted-foreground: color-mix(in oklab, var(--ink) 58%, var(--ground));
+  --accent-foreground: var(--ground);
+  --destructive: var(--accent);
+  --border: color-mix(in oklab, var(--ink) 14%, var(--ground));
+  --input: color-mix(in oklab, var(--ink) 22%, var(--ground));
+  --ring: var(--primary);
+
+  /* hairline gridline, visible but quiet */
+  --gridline: color-mix(in oklab, var(--ink) 16%, var(--ground));
+
+  --radius: 0px;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Display face uses Bricolage's width axis — tight, high tension. */
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-heading);
+    font-variation-settings: "wdth" 85;
+    letter-spacing: -0.02em;
+  }
+  /* The stitch line: every product's real craft data. */
+  .stitch-line {
+    font-family: var(--font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.04em;
+    color: var(--muted-foreground);
+    font-variant-numeric: tabular-nums;
+  }
+}
