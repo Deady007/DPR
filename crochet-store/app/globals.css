@@ -107,6 +107,21 @@
     font-variation-settings: "wdth" 85;
     letter-spacing: -0.02em;
   }
+  /*
+   * Reveals must never be able to hide content.
+   *
+   * The server cannot know the motion preference, so it emits the hidden
+   * initial state. This overrides it in CSS — !important beats the inline
+   * style, and it applies before hydration, so a reduced-motion visitor never
+   * sees a blank grid even if JavaScript never arrives.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    .motion-reveal {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
+
   /* The stitch line: every product's real craft data. */
   .stitch-line {
     font-family: var(--font-mono);
